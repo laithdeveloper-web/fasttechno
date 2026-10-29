@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Fast Techno LLC — Websites, Apps, AI & Digital Marketing</title>
 <meta name="description" content="Fast Techno LLC builds websites, applications, business systems, AI solutions and data-driven digital marketing for ambitious brands.">
 <meta name="theme-color" content="#F6F8FC">
@@ -531,26 +531,42 @@ body{overflow-wrap:break-word}
 /* ===== Section data-assembly animation (ported) ===== */
 .fx-sec{position:relative;isolation:isolate}
 .fx-layer{position:absolute;inset:clamp(1rem,3vw,2.5rem) 4vw;pointer-events:none;z-index:-1}
-.fx-c{position:absolute;width:22px;height:22px;border:1px solid var(--cyan);opacity:0;transition:opacity .6s var(--ease),transform .9s var(--ease)}
-.fx-c.tl{top:0;left:0;border-width:1px 0 0 1px;transform:translate(24px,24px)}
-.fx-c.tr{top:0;right:0;border-width:1px 1px 0 0;transform:translate(-24px,24px)}
-.fx-c.bl{bottom:0;left:0;border-width:0 0 1px 1px;transform:translate(24px,-24px)}
-.fx-c.br{bottom:0;right:0;border-width:0 1px 1px 0;transform:translate(-24px,-24px)}
+.fx-c{position:absolute;width:22px;height:22px;border:1px solid var(--cyan);opacity:0;transition:opacity .7s cubic-bezier(.22,1,.36,1),transform 1s cubic-bezier(.22,1,.36,1);will-change:transform,opacity}
+.fx-c.tl{top:0;left:0;border-width:1px 0 0 1px;transform:translate3d(24px,24px,0)}
+.fx-c.tr{top:0;right:0;border-width:1px 1px 0 0;transform:translate3d(-24px,24px,0)}
+.fx-c.bl{bottom:0;left:0;border-width:0 0 1px 1px;transform:translate3d(24px,-24px,0)}
+.fx-c.br{bottom:0;right:0;border-width:0 1px 1px 0;transform:translate3d(-24px,-24px,0)}
 .fx-on .fx-c{opacity:.55;transform:none}
-.fx-scan{position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--blue),transparent);box-shadow:0 0 18px 2px color-mix(in oklab,var(--cyan) 60%,transparent);opacity:0}
+.fx-done .fx-c{will-change:auto}
+/* scan line: moved with transform (GPU) instead of animating "top" */
+.fx-scan{position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--blue),transparent);box-shadow:0 0 18px 2px color-mix(in oklab,var(--cyan) 60%,transparent);opacity:0;will-change:transform,opacity}
 .fx-scan::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(0deg,color-mix(in oklab,var(--cyan) 10%,transparent),transparent)}
-.fx-on .fx-scan{animation:fxScan 1.6s var(--ease) both}
-@keyframes fxScan{0%{top:0;opacity:0}10%{opacity:1}85%{opacity:1}100%{top:100%;opacity:0}}
+.fx-on .fx-scan{animation:fxScan 1.6s cubic-bezier(.65,0,.35,1) both}
+@keyframes fxScan{0%{transform:translate3d(0,0,0);opacity:0}10%{opacity:1}85%{opacity:1}100%{transform:translate3d(0,var(--fx-h,600px),0);opacity:0}}
+.fx-done .fx-scan{display:none}
+/* data assembly: same look (wipe + 3D tilt + glow), tuned for 60fps */
 .fx-item{opacity:0}
-.fx-on .fx-item{animation:fxAssemble 1.1s var(--ease) both;animation-delay:calc(.25s + var(--fx-i,0) * 90ms)}
+.fx-on .fx-item{animation:fxAssemble 1.1s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(.25s + min(var(--fx-i,0),12) * 90ms);will-change:transform,opacity,clip-path;backface-visibility:hidden}
 @keyframes fxAssemble{
-  0%{opacity:0;clip-path:inset(0 0 100% 0);transform:perspective(1000px) translateY(40px) rotateX(-18deg);filter:blur(10px) brightness(1.8)}
-  45%{opacity:1;filter:blur(2px) brightness(1.3)}
-  100%{opacity:1;clip-path:inset(-40px -40px -40px -40px);transform:none;filter:none}}
-.fx-on .fx-item.fx-box{animation:fxAssemble 1.1s var(--ease) both,fxEdge 1.8s var(--ease) both;animation-delay:calc(.25s + var(--fx-i,0) * 90ms)}
-@keyframes fxEdge{0%,30%{box-shadow:0 0 0 1px color-mix(in oklab,var(--cyan) 70%,transparent),0 0 40px -6px color-mix(in oklab,var(--cyan) 60%,transparent)}100%{box-shadow:var(--shadow)}}
+  0%{opacity:0;clip-path:inset(0 0 100% 0);transform:perspective(1000px) translate3d(0,40px,0) rotateX(-18deg);filter:blur(6px) brightness(1.8)}
+  45%{opacity:1;filter:blur(1px) brightness(1.3)}
+  100%{opacity:1;clip-path:inset(-40px -40px -40px -40px);transform:perspective(1000px) translate3d(0,0,0) rotateX(0);filter:blur(0) brightness(1)}}
+/* edge glow: pseudo-element opacity (GPU) instead of animating box-shadow */
+.fx-item.fx-box{position:relative}
+.fx-item.fx-box::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 1px color-mix(in oklab,var(--cyan) 70%,transparent),0 0 40px -6px color-mix(in oklab,var(--cyan) 60%,transparent);opacity:0;z-index:2}
+.fx-on .fx-item.fx-box::after{animation:fxEdge 1.8s cubic-bezier(.22,1,.36,1) both;animation-delay:inherit}
+@keyframes fxEdge{0%,30%{opacity:1}100%{opacity:0}}
 .fx-on .reveal{opacity:1!important;transform:none!important;filter:none!important}
-.fx-done .fx-item{opacity:1;animation:none!important}
+.fx-done .fx-item{opacity:1;animation:none!important;will-change:auto;clip-path:none;filter:none;transform:none}
+.fx-done .fx-item.fx-box::after{display:none}
+/* mobile: identical choreography; blur swapped for brightness only (blur is what stutters on phones) */
+@media (max-width:860px),(hover:none){
+ @keyframes fxAssemble{
+  0%{opacity:0;clip-path:inset(0 0 100% 0);transform:perspective(900px) translate3d(0,32px,0) rotateX(-14deg);filter:brightness(1.7)}
+  45%{opacity:1;filter:brightness(1.25)}
+  100%{opacity:1;clip-path:inset(-40px -40px -40px -40px);transform:perspective(900px) translate3d(0,0,0) rotateX(0);filter:brightness(1)}}
+ .fx-on .fx-item{animation-duration:1s;animation-delay:calc(.2s + min(var(--fx-i,0),8) * 80ms)}
+}
 @media (prefers-reduced-motion:reduce){.fx-item{opacity:1!important;animation:none!important}.fx-scan{display:none}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap">
@@ -1470,7 +1486,7 @@ var SEL=".section-head,.plans-carousel,.svc,.sol,.proj,.step,.card,.feat,.form,.
 var BOX=".svc,.sol,.proj,.card,.feat,.form,.member";
 function init(){
   var secs=[].slice.call(document.querySelectorAll("main section[id]:not(.hero),main section.clients,main section.intro-sec"));
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var s=e.target;s.classList.add("fx-on");io.unobserve(s);setTimeout(function(){s.classList.add("fx-done")},1100+90*(s._fxn||0)+1200)}})},{threshold:.12});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var s=e.target;s.classList.add("fx-on");io.unobserve(s);s.style.setProperty("--fx-h",s.offsetHeight+"px");setTimeout(function(){s.classList.add("fx-done")},1100+90*Math.min(s._fxn||0,12)+1200)}})},{threshold:0,rootMargin:"0px 0px -12% 0px"});
   secs.forEach(function(s){
     if(s.classList.contains("fx-sec"))return;
     s.classList.add("fx-sec");
@@ -1626,7 +1642,7 @@ function send(text,quick){text=String(text||"").trim();if(!text)return;if(text.l
  var uh=esc(text);hist.push({r:"u",h:uh,l:L});add("u",uh,L);
  var out=quick===0?answer("compare plans",L):quick===1?answer("services",L):quick===2?answer("whatsapp",L):answer(text,L);
  typing.style.display="flex";setTimeout(function(){typing.style.display="none";hist.push({r:"b",h:out,l:L});add("b",out,L);save()},450)}
-function open(v){root.classList.toggle("open",v);$("ftc-launch").setAttribute("aria-expanded",v);if(v){inp.focus()}else{$("ftc-launch").focus()}}
+function open(v){root.classList.toggle("open",v);$("ftc-launch").setAttribute("aria-expanded",v);document.documentElement.classList.toggle("ftc-lock",v&&matchMedia("(max-width:640px)").matches);if(v){if(matchMedia("(min-width:641px)").matches)inp.focus();setTimeout(function(){log.scrollTop=log.scrollHeight},50)}else{$("ftc-launch").focus()}}
 $("ftc-launch").onclick=function(){open(!root.classList.contains("open"))};
 $("ftc-min").onclick=function(){open(false)};
 $("ftc-clear").onclick=function(){hist=[];save();render()};
@@ -1638,5 +1654,53 @@ ui();render();
 })();
 </script>
 <!-- FT-CHATBOT END -->
+<style id="ft-v31-polish">
+/* ---- v31: performance + mobile polish ---- */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation}
+*{-webkit-tap-highlight-color:transparent}
+@media (max-width:860px),(hover:none){
+ body{background-attachment:scroll}
+ .btn-ghost,.stat,.svc,.plan,.pc-arrow{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+}
+/* Chatbot: animated panel */
+#ftc-panel{display:flex!important;opacity:0;visibility:hidden;pointer-events:none;transform:translate3d(0,14px,0) scale(.97);transform-origin:bottom right;transition:opacity .28s cubic-bezier(.22,1,.36,1),transform .34s cubic-bezier(.22,1,.36,1),visibility 0s linear .34s;height:min(600px,calc(100dvh - 190px));background:var(--bg-2,var(--bg,#fff))}
+[dir=rtl] #ftc-panel,#ftc-root[dir=rtl] #ftc-panel{transform-origin:bottom left}
+#ftc-root.open #ftc-panel{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .28s cubic-bezier(.22,1,.36,1),transform .34s cubic-bezier(.22,1,.36,1),visibility 0s}
+#ftc-launch{transition:transform .3s cubic-bezier(.22,1,.36,1)}
+#ftc-launch:active{transform:scale(.92)}
+#ftc-log{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+.ftc-m{animation:ftcIn .32s cubic-bezier(.22,1,.36,1) both}
+@keyframes ftcIn{from{opacity:0;transform:translate3d(0,8px,0)}to{opacity:1;transform:none}}
+#ftc-quick{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}#ftc-quick::-webkit-scrollbar{display:none}
+#ftc-quick button{flex:none;min-height:34px}
+#ftc-in{font-size:16px;line-height:1.35;min-height:44px;height:44px;padding:11px 12px}
+#ftc-send{min-width:46px;min-height:44px;font-size:16px}
+#ftc-head button{min-width:38px;height:36px}
+@media (max-width:640px){
+ #ftc-root{inset-inline-end:calc(14px + env(safe-area-inset-right));bottom:calc(88px + env(safe-area-inset-bottom))}
+ #ftc-launch{width:54px;height:54px}
+ #ftc-panel{position:fixed;inset:auto 0 0 0;width:100%;height:min(88dvh,calc(100dvh - 56px));max-height:none;border-radius:22px 22px 0 0;border-bottom:0;transform:translate3d(0,100%,0);transform-origin:bottom center;transition:opacity .25s ease,transform .42s cubic-bezier(.22,1,.36,1),visibility 0s linear .42s;padding-bottom:env(safe-area-inset-bottom)}
+ #ftc-root.open #ftc-panel{transform:none;transition:opacity .25s ease,transform .42s cubic-bezier(.22,1,.36,1),visibility 0s}
+ #ftc-root.open #ftc-launch{opacity:0;pointer-events:none;transform:scale(.6)}
+ #ftc-head{padding:14px 14px 12px;position:relative}
+ #ftc-head::before{content:"";position:absolute;top:6px;left:50%;width:38px;height:4px;margin-left:-19px;border-radius:4px;background:rgba(255,255,255,.55)}
+ .ftc-m{max-width:90%;font-size:15px}
+ #ftc-form{padding:10px 10px calc(10px + env(safe-area-inset-bottom))}
+}
+html.ftc-lock,html.ftc-lock body{overflow:hidden;overscroll-behavior:none}
+@media (prefers-reduced-motion:reduce){#ftc-panel,.ftc-m{transition:none!important;animation:none!important}}
+</style>
+<script id="ft-v31-nozoom">
+(function(){
+ ["gesturestart","gesturechange","gestureend"].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault()},{passive:false})});
+ document.addEventListener("touchmove",function(e){if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
+ var last=0;document.addEventListener("touchend",function(e){var n=Date.now();if(n-last<300&&!e.target.closest("input,textarea,select"))e.preventDefault();last=n},{passive:false});
+ document.addEventListener("wheel",function(e){if(e.ctrlKey)e.preventDefault()},{passive:false});
+ document.addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&["+","-","=","0"].indexOf(e.key)>-1)e.preventDefault()});
+ /* keep chatbot sheet above the mobile keyboard */
+ var vv=window.visualViewport,p=document.getElementById("ftc-panel");
+ if(vv&&p){var fit=function(){if(matchMedia("(max-width:640px)").matches){var kb=Math.max(0,window.innerHeight-vv.height-vv.offsetTop);p.style.bottom=kb+"px";p.style.height=kb?(vv.height-12)+"px":""}else{p.style.bottom="";p.style.height=""}};vv.addEventListener("resize",fit);vv.addEventListener("scroll",fit)}
+})();
+</script>
 </body>
 </html>
