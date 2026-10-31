@@ -1585,7 +1585,7 @@ document.readyState==="loading"?document.addEventListener("DOMContentLoaded",mou
 </style>
 <div id="ftc-root" dir="ltr">
  <div id="ftc-panel" role="dialog" aria-modal="false" aria-labelledby="ftc-title">
-  <div id="ftc-head"><b id="ftc-title">Fast Techno Assistant<small id="ftc-sub">Plans, services &amp; contact</small></b>
+  <div id="ftc-head"><b id="ftc-title">Fast Techno AI<small id="ftc-sub">AI Sales Consultant</small></b>
    <button type="button" id="ftc-lang" aria-label="Switch language">ع</button>
    <button type="button" id="ftc-clear" aria-label="Clear chat">⟲</button>
    <button type="button" id="ftc-min" aria-label="Minimize chat">—</button></div>
@@ -1605,8 +1605,8 @@ document.readyState==="loading"?document.addEventListener("DOMContentLoaded",mou
 var K=JSON.parse(document.getElementById("ftc-knowledge").textContent);
 var WA=K.contact.whatsapp_link, $=function(i){return document.getElementById(i)};
 var root=$("ftc-root"),log=$("ftc-log"),inp=$("ftc-in"),typing=$("ftc-typing");
-var T={en:{sub:"Plans, services & contact",mock:"Preview mode: practice replies from the approved website facts (live AI not connected).",ph:"Type your question…",hi:"Hello! I can help you compare our plans, explore services, or reach the team on WhatsApp. What would you like to know?",q:["Compare plans","Explore services","Contact on WhatsApp"],lang:"ع",fb:"The website doesn't specify that. Please ask our team directly on WhatsApp: ",wa:"You can reach our team on WhatsApp here: ",svc:"Our services:",plans:"Our monthly plans:",pdf:"Plan PDF",book:"Book on WhatsApp",ask:"To suggest a plan, which matters most to you: number of posts, videos/reels, or stories?",rec:"Based on published features, the lowest-cost plan that matches is",inj:"I can only help with Fast Techno's published plans, services and contact details.",about:"",err:"Please type a shorter message."},
-ar:{sub:"الباقات والخدمات والتواصل",mock:"وضع المعاينة: ردود تجريبية من معلومات الموقع المعتمدة (الذكاء الاصطناعي غير متصل).",ph:"اكتب سؤالك…",hi:"مرحباً! يمكنني مساعدتك في مقارنة باقاتنا، أو التعرف على خدماتنا، أو التواصل مع الفريق عبر واتساب. بماذا أساعدك؟",q:["قارن الباقات","استكشف الخدمات","تواصل عبر واتساب"],lang:"EN",fb:"الموقع لا يحدد هذه المعلومة. يرجى سؤال فريقنا مباشرة عبر واتساب: ",wa:"يمكنك التواصل مع فريقنا عبر واتساب هنا: ",svc:"خدماتنا:",plans:"باقاتنا الشهرية:",pdf:"ملف الباقة",book:"احجز عبر واتساب",ask:"لأقترح باقة مناسبة، ما الأهم بالنسبة لك: عدد المنشورات، الفيديوهات/الريلز، أم الستوري؟",rec:"بحسب الميزات المنشورة، أقل باقة تكلفة تناسب ذلك هي",inj:"يمكنني المساعدة فقط في باقات وخدمات ومعلومات تواصل فاست تكنو المنشورة.",err:"يرجى كتابة رسالة أقصر."}};
+var T={en:{sub:"AI Sales Consultant",mock:"Preview mode: practice replies from the approved website facts (live AI not connected).",ph:"Type your question…",hi:"Hello! I’m Fast Techno’s AI sales consultant. What would you like to improve in your business?",q:["Compare plans","Explore services","Contact on WhatsApp"],lang:"ع",fb:"The website doesn't specify that. Please ask our team directly on WhatsApp: ",wa:"You can reach our team on WhatsApp here: ",svc:"Our services:",plans:"Our monthly plans:",pdf:"Plan PDF",book:"Book on WhatsApp",ask:"To suggest a plan, which matters most to you: number of posts, videos/reels, or stories?",rec:"Based on published features, the lowest-cost plan that matches is",inj:"I can only help with Fast Techno's published plans, services and contact details.",about:"",err:"Please type a shorter message."},
+ar:{sub:"مستشار مبيعات بالذكاء الاصطناعي",mock:"وضع المعاينة: ردود تجريبية من معلومات الموقع المعتمدة (الذكاء الاصطناعي غير متصل).",ph:"اكتب سؤالك…",hi:"مرحباً! أنا مستشار مبيعات فاست تكنو بالذكاء الاصطناعي. ما الذي ترغب في تحسينه في نشاطك التجاري؟",q:["قارن الباقات","استكشف الخدمات","تواصل عبر واتساب"],lang:"EN",fb:"الموقع لا يحدد هذه المعلومة. يرجى سؤال فريقنا مباشرة عبر واتساب: ",wa:"يمكنك التواصل مع فريقنا عبر واتساب هنا: ",svc:"خدماتنا:",plans:"باقاتنا الشهرية:",pdf:"ملف الباقة",book:"احجز عبر واتساب",ask:"لأقترح باقة مناسبة، ما الأهم بالنسبة لك: عدد المنشورات، الفيديوهات/الريلز، أم الستوري؟",rec:"بحسب الميزات المنشورة، أقل باقة تكلفة تناسب ذلك هي",inj:"يمكنني المساعدة فقط في باقات وخدمات ومعلومات تواصل فاست تكنو المنشورة.",err:"يرجى كتابة رسالة أقصر."}};
 var lang=(document.documentElement.lang||"").indexOf("ar")===0?"ar":"en";
 var hist=[];try{hist=JSON.parse(sessionStorage.getItem("ftc-hist")||"[]")}catch(e){}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
@@ -1634,14 +1634,31 @@ function answer(q,L){var s=q.toLowerCase(),t=T[L];
  return esc(t.fb)+link(WA)}
 function add(role,html,L){var d=document.createElement("div");d.className="ftc-m "+(role==="u"?"ftc-u":"ftc-b");d.dir=L==="ar"?"rtl":"ltr";d.lang=L;d.innerHTML=html;log.appendChild(d);log.scrollTop=log.scrollHeight}
 function save(){try{sessionStorage.setItem("ftc-hist",JSON.stringify(hist.slice(-30)))}catch(e){}}
-function ui(){var t=T[lang];root.dir=lang==="ar"?"rtl":"ltr";$("ftc-sub").textContent=t.sub;$("ftc-mock").textContent=t.mock;inp.placeholder=t.ph;$("ftc-lang").textContent=t.lang;
+function ui(){var t=T[lang];root.dir=lang==="ar"?"rtl":"ltr";$("ftc-sub").textContent=t.sub;$("ftc-mock").textContent=t.mock;$("ftc-mock").style.display=live===false?"":"none";inp.placeholder=t.ph;$("ftc-lang").textContent=t.lang;
  var qb=$("ftc-quick");qb.innerHTML="";t.q.forEach(function(x,i){var b=document.createElement("button");b.type="button";b.textContent=x;b.onclick=function(){send(x,i)};qb.appendChild(b)})}
 function render(){log.innerHTML="";add("b",esc(T[lang].hi),lang);hist.forEach(function(h){add(h.r,h.h,h.l)})}
-function send(text,quick){text=String(text||"").trim();if(!text)return;if(text.length>500){add("b",esc(T[lang].err),lang);return}
+function md(t){var links=[];var raw=String(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s]+)\)/g,function(m,label,url){var key="FTCLINKTOKEN"+links.length+"END";links.push({key:key,url:url,label:label});return key});
+ raw=raw.replace(/https?:\/\/[^\s<>]+/g,function(url){var key="FTCLINKTOKEN"+links.length+"END";links.push({key:key,url:url,label:url});return key});
+ var h=esc(raw).replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>").replace(/^#{1,4}\s*/gm,"").replace(/^\s*[-*]\s+/gm,"• ");
+ links.forEach(function(x){h=h.replace(x.key,link(x.url,x.label))});return h}
+
+var live=null,busy=false;
+function setMode(m){live=m;var el=$("ftc-mock");if(m){el.style.display="none"}else{el.style.display="";el.textContent=T[lang].mock}}
+function fallback(text,quick,L){var out=quick===0?answer("compare plans",L):quick===1?answer("services",L):quick===2?answer("whatsapp",L):answer(text,L);setMode(false);hist.push({r:"b",h:out,l:L,t:"",mock:1});add("b",out,L);save()}
+function send(text,quick){text=String(text||"").trim();if(!text||busy)return;if(text.length>1000){add("b",esc(T[lang].err),lang);return}
  var L=quick!=null?lang:detect(text);if(L!==lang){lang=L;ui()}
- var uh=esc(text);hist.push({r:"u",h:uh,l:L});add("u",uh,L);
- var out=quick===0?answer("compare plans",L):quick===1?answer("services",L):quick===2?answer("whatsapp",L):answer(text,L);
- typing.style.display="flex";setTimeout(function(){typing.style.display="none";hist.push({r:"b",h:out,l:L});add("b",out,L);save()},450)}
+ var uh=esc(text);var msgs=hist.filter(function(h){return h.t&&!h.mock}).slice(-16).map(function(h){return{role:h.r==="u"?"user":"assistant",content:h.t}});
+ hist.push({r:"u",h:uh,l:L,t:text});add("u",uh,L);msgs.push({role:"user",content:text});
+ busy=true;typing.style.display="flex";log.scrollTop=log.scrollHeight;
+ fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:msgs,lang:L})}).then(function(r){
+  if(!r.ok||!r.body)return r.json().catch(function(){return{}}).then(function(j){throw j});
+  setMode(true);var rd=r.body.getReader(),dec=new TextDecoder(),acc="",d=null;
+  function pump(){return rd.read().then(function(c){if(c.done)return;acc+=dec.decode(c.value,{stream:true});
+   if(!d){typing.style.display="none";add("b","",L);d=log.lastChild}d.innerHTML=md(acc);log.scrollTop=log.scrollHeight;return pump()})}
+  return pump().then(function(){if(!acc)throw{};hist.push({r:"b",h:md(acc),l:L,t:acc});save()})
+ }).catch(function(e){typing.style.display="none";
+  if(e&&e.code==="rate_limited"){add("b",esc(L==="ar"?"عدد الرسائل كبير خلال وقت قصير. يرجى المحاولة بعد قليل، أو تواصل معنا عبر واتساب: ":"You're sending messages quickly. Please wait a moment, or reach us on WhatsApp: ")+link(WA),L);return}
+  fallback(text,quick,L)}).then(function(){busy=false;typing.style.display="none";if(matchMedia("(min-width:641px)").matches)inp.focus()})}
 function open(v){root.classList.toggle("open",v);$("ftc-launch").setAttribute("aria-expanded",v);document.documentElement.classList.toggle("ftc-lock",v&&matchMedia("(max-width:640px)").matches);if(v){if(matchMedia("(min-width:641px)").matches)inp.focus();setTimeout(function(){log.scrollTop=log.scrollHeight},50)}else{$("ftc-launch").focus()}}
 $("ftc-launch").onclick=function(){open(!root.classList.contains("open"))};
 $("ftc-min").onclick=function(){open(false)};
